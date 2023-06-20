@@ -1,4 +1,4 @@
-import { Api } from '@revery/api-client'
+import { Api } from '@flowtastic/api-client'
 
 export const api = new Api({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,

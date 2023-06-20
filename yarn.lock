@@ -343,6 +343,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.37.0.tgz#cf1b5fa24217fe007f6487a26d765274925efa7d"
   integrity sha512-x5vzdtOOGgFVDCUs81QRB2+liax8rFg3+7hqM+QhBG0/G3F1ZsoYl97UrqgHgQ9KKT7G6c4V+aTUCgu/n22v1A==
 
+"@flowtastic/api-client@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@flowtastic/api-client/-/api-client-0.1.2.tgz#3c9b677d3adf8552913993e4f2a14cfc93f54937"
+  integrity sha512-KqZNCr3vsVddnsHUWUzYJQe5Rd6800ldNb22yMVa4taRdmRzkI2+MxAybC3D4BoGp9NMD2pwl62OLQ/eMEQqWg==
+
 "@headlessui/react@^1.7.14":
   version "1.7.15"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.15.tgz#53ef6ae132af81b8f188414767b6e79ebf8dc73f"
