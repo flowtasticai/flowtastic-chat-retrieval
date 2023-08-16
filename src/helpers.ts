@@ -1,6 +1,8 @@
 import { api } from 'hooks/client'
 import { FileMessage, SystemMessage, UserMessage } from 'types'
 
+import { HttpResponse } from '@flowtastic/api-client';
+
 export const awaitRun = async (
   workflowId: string,
   inputs: Record<string, unknown>,
@@ -11,27 +13,32 @@ export const awaitRun = async (
   } = await api.runs.create({
     workflowId,
     inputs,
-  })
+  });
 
   return new Promise((resolve, reject) => {
-    let tries = 0
+    let tries = 0;
     const interval = setInterval(async () => {
-      const { data: run } = await api.runs.get(id)
+      const responseResults: HttpResponse<Record<string, any>> = await api.runs.getResults(id);
+      const results = responseResults.data;
 
-      if (run.results && outputId in run.results) {
-        clearInterval(interval)
-        resolve((run.outputs as Record<string, string>)[outputId])
-        return
+      if (results.hasOwnProperty(outputId)) {
+        const answer = results[outputId];
+
+        if (answer !== undefined || answer !== null) {
+          clearInterval(interval);
+          resolve(answer);
+          return;
+        }
       }
 
-      if (++tries > 30) {
-        clearInterval(interval)
-        reject(new Error('Timed out waiting for run to complete'))
-        return
+      if (++tries > 60) {
+        clearInterval(interval);
+        reject(new Error('Timed out waiting for run to complete'));
+        return;
       }
-    }, 1000)
-  })
-}
+    }, 1000);
+  });
+};
 
 export const makeIdGenerator = (): (() => string) => {
   let seq = 0
