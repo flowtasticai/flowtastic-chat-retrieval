@@ -18,7 +18,7 @@ export const awaitRun = async (
     const interval = setInterval(async () => {
       const { data: run } = await api.runs.get(id)
 
-      if (outputId in run.outputs) {
+      if (run.results && outputId in run.results) {
         clearInterval(interval)
         resolve((run.outputs as Record<string, string>)[outputId])
         return
