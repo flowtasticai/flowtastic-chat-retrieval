@@ -1,7 +1,6 @@
 import { Layout } from 'components/Layout'
 import { useCallback, useState } from 'react'
 import {
-  awaitRun,
   createFileMessage,
   createSystemMessage,
   createUserMessage,
@@ -10,12 +9,9 @@ import { Message } from 'types'
 import { InputBar } from 'components/InputBar'
 import { Messages } from 'components/Messages'
 import { useStorage } from 'hooks/useStorage'
+import { api } from 'hooks/client'
 
-const WORKFLOW_ID = process.env.NEXT_PUBLIC_QUERY_WORKFLOW
-const INPUT_ID = process.env.NEXT_PUBLIC_QUERY_INPUT
-const OUTPUT_ID = process.env.NEXT_PUBLIC_QUERY_OUTPUT
-const WITH_MEMORY = process.env.NEXT_PUBLIC_QUERY_WITH_MEMORY === 'true'
-const USER_ID = process.env.NEXT_PUBLIC_QUERY_USER_INPUT
+const useMemory = process.env.NEXT_PUBLIC_QUERY_WITH_MEMORY === 'true'
 
 export default function IndexPage() {
   const [messages, setMessages] = useState<Message[]>([
@@ -38,18 +34,22 @@ export default function IndexPage() {
       setMessages((messages) => [...messages, createUserMessage(message)])
       setWaiting(true)
 
-      const inputs = { [INPUT_ID]: message }
+      const inputs: Record<string, unknown> = { question: { text: message } }
 
-      if (WITH_MEMORY && userId) {
-        inputs[USER_ID] = userId
+      if (useMemory && userId) {
+        inputs.user = { text: userId }
       }
 
-      const output = await awaitRun(WORKFLOW_ID, inputs, OUTPUT_ID)
+      const { data: result } = await api.runs.create({
+        workflowId: process.env.NEXT_PUBLIC_QUERY_WORKFLOW,
+        mode: 'sync',
+        inputs,
+      })
 
       setWaiting(false)
       setMessages((messages) => [
         ...messages,
-        createSystemMessage(String(output)),
+        createSystemMessage(String(result.results.answer.text)),
       ])
     },
     [userId]

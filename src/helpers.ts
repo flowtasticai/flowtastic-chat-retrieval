@@ -1,38 +1,6 @@
 import { api } from 'hooks/client'
 import { FileMessage, SystemMessage, UserMessage } from 'types'
 
-export const awaitRun = async (
-  workflowId: string,
-  inputs: Record<string, unknown>,
-  outputId: string
-) => {
-  const {
-    data: { id },
-  } = await api.runs.create({
-    workflowId,
-    inputs,
-  })
-
-  return new Promise((resolve, reject) => {
-    let tries = 0
-    const interval = setInterval(async () => {
-      const { data: run } = await api.runs.get(id)
-
-      if (outputId in run.outputs) {
-        clearInterval(interval)
-        resolve((run.outputs as Record<string, string>)[outputId])
-        return
-      }
-
-      if (++tries > 30) {
-        clearInterval(interval)
-        reject(new Error('Timed out waiting for run to complete'))
-        return
-      }
-    }, 1000)
-  })
-}
-
 export const makeIdGenerator = (): (() => string) => {
   let seq = 0
   return () => String(seq++)

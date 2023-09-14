@@ -3,7 +3,7 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import { useUpload } from 'hooks/useUpload'
 import { Spinner } from 'components/Spinner'
 import { FileMessage } from 'types'
-import { awaitRun } from 'helpers'
+import { api } from 'hooks/client'
 
 export const FileMessageContent: FC<FileMessage> = ({ content }) => {
   const [{ fetching, progress }, uploadFile] = useUpload()
@@ -12,15 +12,16 @@ export const FileMessageContent: FC<FileMessage> = ({ content }) => {
   useEffect(() => {
     setFinished(false)
     uploadFile(content).then(async (file) => {
-      await awaitRun(
-        process.env.NEXT_PUBLIC_INGEST_WORKFLOW,
-        { [process.env.NEXT_PUBLIC_INGEST_INPUT]: { id: file.id } },
-        process.env.NEXT_PUBLIC_INGEST_OUTPUT
-      )
-
+      await api.runs.create({
+        workflowId: process.env.NEXT_PUBLIC_INGEST_WORKFLOW,
+        mode: 'sync',
+        inputs: {
+          file: { file: { id: file.id } },
+        },
+      })
       setFinished(true)
     })
-  }, [content])
+  }, [content, uploadFile])
 
   return (
     <ul className="max-w-md space-y-2 text-gray-500 list-inside dark:text-gray-400">
