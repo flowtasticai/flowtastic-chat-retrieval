@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@revery/api-client'],
+  transpilePackages: ['@flowtastic/react'],
   experimental: {
     fullySpecified: true,
   },

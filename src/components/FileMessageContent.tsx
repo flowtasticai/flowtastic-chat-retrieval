@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { CheckIcon } from '@heroicons/react/24/outline'
-import { useUpload } from 'hooks/useUpload'
+import { useUpload } from '@flowtastic/react'
 import { Spinner } from 'components/Spinner'
 import { FileMessage } from 'types'
 import { api } from 'hooks/client'

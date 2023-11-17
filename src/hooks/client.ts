@@ -1,14 +1,6 @@
-import { Api } from '@flowtastic/api-client'
+import { Flowtastic } from '@flowtastic/api-client'
 
-export const api = new Api({
+export const api = new Flowtastic({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
-  securityWorker(securityData: string | null) {
-    return {
-      headers: {
-        Authorization: `Bearer ${securityData}`,
-      },
-    }
-  },
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
 })
-
-api.setSecurityData(process.env.NEXT_PUBLIC_API_KEY)
