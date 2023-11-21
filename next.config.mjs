@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@flowtastic/react'],
   experimental: {
     fullySpecified: true,
   },

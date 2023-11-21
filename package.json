@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@flowtastic/api-client": "^0.5.11",
-    "@flowtastic/react": "^0.3.5",
+    "@flowtastic/react": "^0.4.0",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
     "@tailwindcss/forms": "^0.5.3",
